@@ -1,7 +1,8 @@
 import { AddTransactionUseCase } from '../src/domain/usecases/AddTransactionUseCase';
 import type { ITransactionRepository, TransactionFilters, Page } from '../src/data/repositories/ITransactionRepository';
 import type { Transaction, NewTransaction } from '../src/domain/models/Transaction';
-import { ok } from '../src/core/types/Result';
+import { ok, type Result } from '../src/core/types/Result';
+import type { AppError } from '../src/core/errors/AppError';
 
 /**
  * A hand-rolled fake, not a mocking library. For a repository this small,
@@ -15,13 +16,13 @@ class FakeTransactionRepository implements ITransactionRepository {
     this.added.push(input);
     return ok<Transaction>({ id: 'fake-id', ...input });
   }
-  async update() {
+  async update(_id: string, _changes: Partial<NewTransaction>): Promise<Result<Transaction, AppError>> {
     throw new Error('not used in this test');
   }
-  async delete() {
+  async delete(_id: string): Promise<Result<void, AppError>> {
     throw new Error('not used in this test');
   }
-  async getPage(_filters: TransactionFilters, _cursor: string | null, _limit: number): Promise<any> {
+  async getPage(_filters: TransactionFilters, _cursor: string | null, _limit: number): Promise<Result<Page<Transaction>, AppError>> {
     return ok<Page<Transaction>>({ items: [], nextCursor: null });
   }
   async sync() {

@@ -39,7 +39,7 @@ export function useTransactionsViewModel() {
   }, [repo]);
 
   useEffect(() => {
-    load();
+    void load();
   }, [load]);
 
   return {

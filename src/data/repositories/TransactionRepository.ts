@@ -66,12 +66,12 @@ export class TransactionRepository implements ITransactionRepository {
     }
   }
 
-  async update(id: string, changes: Partial<NewTransaction>): Promise<Result<Transaction, AppError>> {
+  async update(_id: string, _changes: Partial<NewTransaction>): Promise<Result<Transaction, AppError>> {
     // Same shape as add(): write locally + queue, don't touch the network here.
     throw new Error('Not implemented - mirror add() pattern with an UPDATE + queued op');
   }
 
-  async delete(id: string): Promise<Result<void, AppError>> {
+  async delete(_id: string): Promise<Result<void, AppError>> {
     // Soft delete: set deleted_at, queue a 'delete' op, filter deleted_at IS NULL
     // everywhere else. Never hard-delete before a sync has confirmed the
     // server has seen it - otherwise a queued create/delete can race.
@@ -103,7 +103,7 @@ export class TransactionRepository implements ITransactionRepository {
 
       const hasMore = rows.length > limit;
       const items = rows.slice(0, limit).map(rowToDomain);
-      const nextCursor = hasMore ? items[items.length - 1].occurredAt.toISOString() : null;
+      const nextCursor = hasMore && items.length > 0 ? items[items.length - 1]!.occurredAt.toISOString() : null;
 
       return ok({ items, nextCursor });
     } catch (cause) {

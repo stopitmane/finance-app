@@ -13,7 +13,7 @@ export interface Database {
   transaction(work: (tx: Database) => Promise<void>): Promise<void>;
 }
 
-export async function openDatabase(name = 'finance.db'): Promise<Database> {
+export async function openDatabase(_name = 'finance.db'): Promise<Database> {
   // Example with expo-sqlite:
   //
   // import * as SQLite from 'expo-sqlite';
